@@ -1,0 +1,25 @@
+{
+  "name": "qiwi/opencart-payment-qiwi",
+  "description": "QIWI payment integration for OpenCart",
+  "type": "library",
+  "version": "0.0.1",
+  "require": {
+    "php": ">=5.6.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-zip": "*"
+  },
+  "require-dev": {
+    "opencart/opencart": "^3"
+  },
+  "autoload-dev": {
+    "classmap": ["build"]
+  },
+  "scripts": {
+    "build": [
+      "composer update --prefer-dist --no-dev -o -n -d src/upload/system/library/qiwi",
+      "Builder::make"
+    ],
+    "make": "Builder::make"
+  }
+}
