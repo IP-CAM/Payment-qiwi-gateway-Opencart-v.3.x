@@ -1,25 +1,54 @@
 {
   "name": "qiwi/opencart-payment-qiwi",
-  "description": "QIWI payment integration for OpenCart",
   "type": "library",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "description": "QIWI payment integration for OpenCart",
+  "keywords": [
+    "qiwi",
+    "payment",
+    "opencart"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/QIWI-API/opencart-payment-qiwi",
+  "support": {
+    "issues": "https://github.com/QIWI-API/opencart-payment-qiwi/issues"
+  },
+  "autoload": {
+    "psr-4": {
+      "Qiwi\\": "upload/system/library/qiwi/src/"
+    }
+  },
   "require": {
     "php": ">=5.6.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-zip": "*"
+    "qiwi/bill-payments-php-sdk": "^0"
   },
   "require-dev": {
-    "opencart/opencart": "^3"
+    "wannabe-pro/composer-release-plugin-zip": "*"
   },
-  "autoload-dev": {
-    "classmap": ["build"]
-  },
-  "scripts": {
-    "build": [
-      "composer update --prefer-dist --no-dev -o -n -d src/upload/system/library/qiwi",
-      "Builder::make"
-    ],
-    "make": "Builder::make"
+  "extra": {
+    "build-plugin-dev": {
+      "build/qiwi.ocmod.zip": {
+        "builder": "zip",
+        "composer": {
+          "minimum-stability": "stable",
+          "prefer-stable": true,
+          "require": {
+            "qiwi/bill-payments-php-sdk": "^0"
+          },
+          "config": {
+            "platform": {
+              "php": "5.6.0"
+            }
+          }
+        },
+        "mapper": {
+          "/^upload.*$/": true,
+          "/^install.xml$/": true,
+          "/^vendor.*(BillPayments\\.php|BillPaymentsException\\.php|Curl\\.php)$/": "/upload/system/library/qiwi/$0"
+        }
+      }
+    }
   }
 }

@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<modification>
-	<name>QIWI payment gateway</name>
-	<code>qiwi</code>
-	<version>0.0.1</version>
-	<author>QIWI https://qiwi.com/</author>
-	<link>https://github.com/QIWI-API/opencart-payment-qiwi</link>
-</modification>
