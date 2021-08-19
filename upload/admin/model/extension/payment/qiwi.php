@@ -68,6 +68,13 @@ class ModelExtensionPaymentQiwi extends Model implements \Qiwi\Admin\Model
     const QUERY_INSERT = 'INSERT INTO `%1$s%2$s` SET `refund` = \'%3$s\', `bill_id` = \'%4$s\', `order_id` = %5$d;';
 
     /**
+     * The orders query.
+     *
+     * @var string
+     */
+    const QUERY_ORDERS = 'SELECT `bills`.`order_id` AS `order_id` FROM `%1$s%2$s` `bills` JOIN `%1$sorder` `orders` ON `orders`.`order_id` = `bills`.`order_id` WHERE `orders`.`payment_method` = \'qiwi\' AND `orders`.`order_status_id` = %3$d';
+
+    /**
      * @inheritDoc
      *
      * @throws Exception
@@ -132,6 +139,22 @@ class ModelExtensionPaymentQiwi extends Model implements \Qiwi\Admin\Model
             defined('DB_PREFIX') ? DB_PREFIX : '',
             self::TABLE_NAME,
             (int) $order
+        ));
+
+        return $query instanceof stdClass
+            ? array_map(function ($row) {
+                return $row['bill_id'];
+            }, $query->rows)
+            : [];
+    }
+
+    public function getOrders($status)
+    {
+        $query = $this->db->query(sprintf(
+            self::QUERY_ORDERS,
+            defined('DB_PREFIX') ? DB_PREFIX : '',
+            self::TABLE_NAME,
+            (int) $status
         ));
 
         return $query instanceof stdClass

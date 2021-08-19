@@ -9,7 +9,8 @@ $_['heading_title']         = 'QIWI Kassa';
 $_['text_qiwi']             = '<a target="_blank" href="https://kassa.qiwi.com/"><img src="view/image/payment/qiwi.png" alt="QIWI Kassa" title="QIWI Kassa" style="border: 1px solid #eee;"/></a>';
 $_['text_supports']         = 'Payment over: VISA, MasterCard, MIR, Phone balance, QIWI Wallet';
 $_['text_description']      = '<p>To start working with the QIWI cash service, you need to <a href="https://kassa.qiwi.com/" target="_blank">register a store</a>.</p>'
-                            . '<p>Also, a <a href="https://kassa.qiwi.com/" target="_blank">demonstration stand</a> is available for you.</p>';
+                            . '<p>Also, a <a href="https://kassa.qiwi.com/" target="_blank">demonstration stand</a> is available for you.</p>'
+                            . '<p>Please be reminded that P2P accounts do not support refunds. You can make a refund yourself by making a transfer to the sender in your QIWI Wallet.</p>';
 $_['text_extension']        = 'Extensions';
 $_['text_success']          = 'Success: You have modified QIWI Kassa payment module!';
 $_['text_edit']             = 'Edit QIWI Kassa';
@@ -34,6 +35,7 @@ $_['text_refund_success']   = 'Invoice will refunding.';
 $_['tab_general']           = 'General settings';
 $_['tab_qiwi']              = 'Qiwi Kassa integration';
 $_['tab_order_status']      = 'Order status';
+$_['tab_sync']              = 'Bill sync';
 
 // Entry
 $_['entry_status']          = 'Status';
@@ -83,3 +85,12 @@ $_['error_permission']       = 'Warning: You do not have permission to modify pa
 $_['error_order_permission'] = 'Warning: You do not have permission to modify order!';
 $_['error_required']         = 'Warning: Сhanges not saved because required settings not set!';
 $_['error_required_field']   = 'This field required.';
+
+// Sync
+$_['sync_button']       = 'Sync now';
+$_['sync_output']       = 'Click the button to update the statuses of unpaid invoices. This will start the process of synchronizing statuses in the QIWI API.';
+$_['sync_beforeunload'] = 'Stop syncing?';
+$_['sync_error']        = 'Syncing error.';
+$_['sync_end']          = 'Synchronization complete!';
+$_['sync_single']       = '[{0}/{1}] Checking the status of payment for an order #{2}';
+$_['sync_success']      = ' - Success';

@@ -32,6 +32,7 @@
                         <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
                         <li><a href="#tab-qiwi" data-toggle="tab">{{ tab_qiwi }}</a></li>
                         <li><a href="#tab-order-status" data-toggle="tab">{{ tab_order_status }}</a></li>
+                        <li><a href="#tab-sync" data-toggle="tab">{{ tab_sync }}</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab-general">
@@ -399,6 +400,16 @@
                                     {% endif %}
                                 </div>
                             </div>
+                        </div>
+                        <div class="tab-pane" id="tab-sync">
+                            <p>
+                                <button class="button button-primary">{{ sync_button }}</button>
+                                <progress class="hidden"></progress>
+                            </p>
+                            <output>{{ sync_output }}</output>
+                            <script>
+                                 var qiwi_sync_text = {{ qiwi_sync_text|json_encode }};
+                            </script>
                         </div>
                     </div>
                 </form>

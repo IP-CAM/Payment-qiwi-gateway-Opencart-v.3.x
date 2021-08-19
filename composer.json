@@ -1,7 +1,6 @@
 {
   "name": "qiwi/opencart-payment-qiwi",
   "type": "library",
-  "version": "0.0.2",
   "description": "QIWI payment integration for OpenCart",
   "keywords": [
     "qiwi",
@@ -25,7 +24,7 @@
     "qiwi/bill-payments-php-sdk": "^0"
   },
   "require-dev": {
-    "wannabe-pro/composer-release-plugin-zip": "*"
+    "wannabe-pro/composer-release-plugin": "*"
   },
   "extra": {
     "build-plugin-dev": {

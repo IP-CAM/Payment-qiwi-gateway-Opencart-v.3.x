@@ -9,7 +9,8 @@ $_['heading_title']         = 'QIWI Касса';
 $_['text_qiwi']             = '<a target="_blank" href="https://kassa.qiwi.com/"><img src="view/image/payment/qiwi.png" alt="QIWI Касса" title="QIWI Касса" style="border: 1px solid #eee;"/></a>';
 $_['text_supports']         = 'Оплата через: VISA, MasterCard, МИР, Баланс телефона, QIWI Кошелек';
 $_['text_description']      = '<p>Для начала работы с сервисом QIWI Касса необходима <a href="https://kassa.qiwi.com/" target="_blank">регистрация магазина</a>.</p>'
-                            . '<p>Так же, для вас доступен <a href="https://developer.qiwi.com/demo/" target="_blank">демонстрационный стенд</a>.</p>';
+                            . '<p>Так же, для вас доступен <a href="https://developer.qiwi.com/demo/" target="_blank">демонстрационный стенд</a>.</p>'
+                            . '<p>Напоминаем, что P2P счета не поддерживает возврат. Вы можете самостоятельно произвести возврат сделав перевод отправителю в вашем QIWI Кошельке.</p>';
 $_['text_extension']        = 'Расширения';
 $_['text_success']          = 'Успех: Вы изменили платежный модуль QIWI Касса!';
 $_['text_edit']             = 'Настроить QIWI Касса';
@@ -34,6 +35,7 @@ $_['text_refund_success']   = 'Будет возврат по счету.';
 $_['tab_general']           = 'Общие настройки';
 $_['tab_qiwi']              = 'Интеграция Qiwi Касса';
 $_['tab_order_status']      = 'Статус заказа';
+$_['tab_sync']              = 'Синхронизация счетов';
 
 // Entry
 $_['entry_status']          = 'Статус';
@@ -83,3 +85,12 @@ $_['error_permission']       = 'Предупреждение: Вам не раз
 $_['error_order_permission'] = 'Предупреждение: Вам не разрешено изменять заказ!';
 $_['error_required']         = 'Предупреждение: Изменения не сохранены, поскольку не заданы необходимые настройки!';
 $_['error_required_field']   = 'Это поле обязательно для заполнения.';
+
+// Sync
+$_['sync_button']       = 'Синхронизировать сейчас';
+$_['sync_output']       = 'Нажмите кнопку, что бы обновить статусы неоплаченных счетов. Это запустит процесс синхронизации статусов в API QIWI.';
+$_['sync_beforeunload'] = 'Прервать синхронизацию?';
+$_['sync_error']        = 'Ошибка синхронизации.';
+$_['sync_end']          = 'Синхронизация завершена!';
+$_['sync_single']       = '[{0}/{1}] Преверка состояния платежа для заказа №{2}';
+$_['sync_success']      = ' - Успех';

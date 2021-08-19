@@ -25,6 +25,7 @@ use Qiwi\Client;
  * @property-read ModelLocalisationOrderStatus $model_localisation_order_status
  * @property-read ModelLocalisationGeoZone $model_localisation_geo_zone
  * @property-read ModelSaleOrder $model_sale_order
+ * @property-read ModelCheckoutOrder $model_checkout_order
  * @property-read Qiwi\Admin\Model $model_extension_payment_qiwi
  */
 class ControllerExtensionPaymentQiwi extends Controller implements \Qiwi\Admin\Controller
@@ -56,6 +57,7 @@ class ControllerExtensionPaymentQiwi extends Controller implements \Qiwi\Admin\C
         $this->load->model('localisation/order_status');
         $this->load->model('localisation/geo_zone');
         $this->document->setTitle($this->language->get('heading_title'));
+        $this->document->addScript('view/javascript/qiwi/sync.js');
         $this->response->setOutput($this->load->view('extension/payment/qiwi', [
             // Text
             'button_save'         => $this->language->get('button_save'),
@@ -113,6 +115,18 @@ class ControllerExtensionPaymentQiwi extends Controller implements \Qiwi\Admin\C
             'help_full_status'      => $this->language->get('help_full_status'),
             'entry_full_status'     => $this->language->get('entry_full_status'),
 
+            // Text Tab Sync
+            'qiwi_sync_text' => [
+                'url' => str_replace('&amp;', '&', $this->url->link('extension/payment/qiwi/sync', [
+                    'user_token' => $this->session->data['user_token']
+                ], true)),
+                'beforeunload' => $this->language->get('sync_beforeunload'),
+                'error' => $this->language->get('sync_error'),
+                'end' => $this->language->get('sync_end'),
+                'single' => $this->language->get('sync_single'),
+                'success' => $this->language->get('sync_success'),
+            ],
+
             // Options
             'error'          => $this->error,
             'order_statuses' => $this->model_localisation_order_status->getOrderStatuses(),
@@ -164,6 +178,102 @@ class ControllerExtensionPaymentQiwi extends Controller implements \Qiwi\Admin\C
             'column_left' => $this->load->controller('common/column_left'),
             'footer'      => $this->load->controller('common/footer'),
         ]));
+    }
+
+    public function sync() {
+        $result = [
+            'message' => null,
+        ];
+        try {
+            if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validateOrderPermission()) {
+                $this->load->language('extension/payment/qiwi');
+                $this->load->model('extension/payment/qiwi');
+                $this->load->model('setting/setting');
+                if (empty( $this->request->post['bill_id'] )) {
+                    $status = $this->config->get('payment_qiwi_waiting_status_id');
+                    $result['list'] = $this->model_extension_payment_qiwi->getOrders($status);
+                } else {
+                    $billId = $this->request->post['bill_id'];
+                    $orderId = $this->model_extension_payment_qiwi->getOrder($billId);
+                    $client = new Client($this->config->get('payment_qiwi_key_secret'));
+                    $bill = $client->getBillInfo($billId);
+                    $order = $this->model_checkout_order->getOrder($orderId);
+
+                    // Process status.
+                    switch ( $bill['status']['value'] ) {
+                        case 'WAITING':
+                            if ($order['order_status_id'] != $this->config->get('payment_qiwi_waiting_status_id')) {
+                                $this->model_checkout_order->addOrderHistory(
+                                    $orderId,
+                                    $this->config->get('payment_qiwi_waiting_status_id'),
+                                    $this->language->get('waiting_bill'),
+                                    true
+                                );
+                            }
+                            break;
+                        case 'PAID':
+                            if ($order['order_status_id'] != $this->config->get('payment_qiwi_paid_status_id')) {
+                                $this->model_checkout_order->addOrderHistory(
+                                    $orderId,
+                                    $this->config->get('payment_qiwi_paid_status_id'),
+                                    $this->language->get('paid_bill'),
+                                    true
+                                );
+                            }
+                            break;
+                        case 'REJECTED':
+                            if ($order['order_status_id'] != $this->config->get('payment_qiwi_rejected_status_id')) {
+                                $this->model_checkout_order->addOrderHistory(
+                                    $orderId,
+                                    $this->config->get('payment_qiwi_rejected_status_id'),
+                                    $this->language->get('rejected_bill'),
+                                    true
+                                );
+                            }
+                            break;
+                        case 'EXPIRED':
+                            if ($order['order_status_id'] != $this->config->get('payment_qiwi_expired_status_id')) {
+                                $this->model_checkout_order->addOrderHistory(
+                                    $orderId,
+                                    $this->config->get('payment_qiwi_expired_status_id'),
+                                    $this->language->get('expired_bill'),
+                                    true
+                                );
+                            }
+                            break;
+                        case 'PARTIAL':
+                            if ($order['order_status_id'] != $this->config->get('payment_qiwi_partial_status_id')) {
+                                $this->model_checkout_order->addOrderHistory(
+                                    $orderId,
+                                    $this->config->get('payment_qiwi_partial_status_id'),
+                                    $this->language->get('partial_bill'),
+                                    true
+                                );
+                            }
+                            break;
+                        case 'FULL':
+                            if ($order['order_status_id'] != $this->config->get('payment_qiwi_full_status_id')) {
+                                $this->model_checkout_order->addOrderHistory(
+                                    $orderId,
+                                    $this->config->get('payment_qiwi_full_status_id'),
+                                    $this->language->get('full_bill'),
+                                    true
+                                );
+                            }
+                            break;
+                        default:
+                            throw new Exception('Unsupported status ' . $bill['status']['value'] . '.');
+                    }
+                    $result['message'] = 'success';
+                }
+            }
+        } catch (Exception $exception) {
+            $this->error['warning'] = $exception->getMessage();
+        }
+
+        $result['message'] = empty($this->error) ? $result['message'] : $this->error['warning'];
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($result));
     }
 
     /**

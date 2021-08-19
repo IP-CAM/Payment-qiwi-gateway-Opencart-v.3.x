@@ -2,7 +2,7 @@
 <modification>
 	<name>QIWI payment gateway</name>
 	<code>qiwi</code>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<author>QIWI https://qiwi.com/</author>
 	<link>https://github.com/QIWI-API/opencart-payment-qiwi</link>
 </modification>
